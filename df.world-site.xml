@@ -10,6 +10,17 @@
         <enum-item name='UNDERWORLD_SPIRE'/>
     </enum-type>
 
+    <enum-type type-name='abstract_building_flags'>
+        <enum-item name='Unk0'/>
+        <enum-item name='Unk1'/>
+        <enum-item name='Unk2'/>
+        <enum-item name='Unk3'/>
+        <enum-item name='AllowVisitors'/>
+        <enum-item name='AllowResidents'/>
+        <enum-item name='Unk6'/>
+        <enum-item name='Unk7'/>
+    </enum-type>
+
     <struct-type type-name='abstract_building_unk'> used within Tomb and Dungeon
         <stl-vector>
             <pointer>
@@ -36,10 +47,10 @@
         <stl-vector name='inhabitants'>
             <pointer>
                 <int16_t/>
-                <int32_t ref-target='historical_figure'/>
+                <int32_t name='histfig_id' ref-target='historical_figure'/>
             </pointer>
         </stl-vector>
-        <df-flagarray name='flags'/>
+        <df-flagarray name='flags' index-enum='abstract_building_flags'/>
         <pointer name='unk1' comment='in temples; hfig is the god'>
             <stl-vector name='hfig' ref-target='historical_figure' type-name='int32_t'/>
             <int32_t/>
@@ -127,22 +138,7 @@
     </class-type>
 
     <class-type type-name='abstract_building_underworld_spirest' inherits-from='abstract_building'>
-        <stl-string name="unk_50"/>
-        <stl-string name="unk_6c"/>
-        <int32_t name="unk_88"/>
-        <int32_t name="unk_8c"/>
-        <int32_t name="unk_90"/>
-        <int32_t name="unk_94"/>
-        <int32_t name="unk_98"/>
-        <int32_t name="unk_9c"/>
-        <int32_t name="unk_a0"/>
-        <int32_t name="unk_a4"/>
-        <int32_t name="unk_a8"/>
-        <int32_t name="unk_ac"/>
-        <int16_t name="unk_b0"/>
-        <int32_t name="unk_b4"/>
-        <int16_t name="unk_b8"/>
-        <int8_t name="unk_ba"/>
+        <compound name='name' type-name='language_name'/>
         <int32_t name="unk_bc"/>
     </class-type>
 
@@ -398,8 +394,17 @@
         <static-array name='road_map' count='51'>
             <static-array count='51' pointer-type='site_realization_crossroads'/>
         </static-array>
-        <static-array name='unk_2d44' count='51'>
-            <static-array count='51' type-name='pointer'/>
+        <static-array name='river_map' count='51'>
+            <static-array count='51'>
+                <pointer>
+                    <static-array name='start' type-name='int32_t' count='48'/>
+                    <static-array name='end'   type-name='int32_t' count='48'/>
+                    <int32_t name="unk_180"/>
+                    <int32_t name="unk_184"/>
+                    <int32_t name="start_array_limits"/>
+                    <int32_t name="end_array_limits"/>
+                </pointer>
+            </static-array>
         </static-array>
         <static-array name='unk_55e8' count='17'>
             <static-array count='17'>
@@ -455,7 +460,7 @@
             </static-array>
         </static-array>
 
-        <static-array name='unk_v40_1' count='51' comment='v0.40.01'>
+        <static-array name='flags_map' count='51' comment='v0.40.01'>
             <static-array count='51' type-name='uint32_t'/>
         </static-array>
 
@@ -475,7 +480,17 @@
         </static-array>
         <stl-vector name='areas'>
             <pointer>
-                <int32_t name="unk_0"/>
+                <enum base-type="int32_t" name="type">
+                    <enum-item name="Crops1"/>
+                    <enum-item name="Crops2"/>
+                    <enum-item name="Crops3"/>
+                    <enum-item name="Meadow"/>
+                    <enum-item name="Pasture"/>
+                    <enum-item name="Orchard"/>
+                    <enum-item name="Woodland"/>
+                    <enum-item name="Waste"/>
+                    <enum-item name="Unknown1"/>
+                </enum>
                 <int32_t name="index"/>
                 <int32_t name="unk_8"/>
                 <int32_t name="min_x"/>
@@ -488,8 +503,8 @@
         </stl-vector>
 
         <int32_t/>
-        <int32_t/>?
-        <int32_t/>?
+        <int32_t name="army_controller_pos_x"/>
+        <int32_t name="army_controller_pos_y"/>
         <static-array name='unk_193bc' count='500'>
             <int32_t/>
             <int32_t/>
@@ -524,16 +539,15 @@
         <int32_t name='num_unk_193bc'/>
         <int32_t/>
         <int32_t/>
-        <static-array name='building_type13' pointer-type='site_realization_building' count='20'/>
-        <int32_t name='num_building_type13'/>
-        <static-array name='building_type5' pointer-type='site_realization_building' count='20'/>
-        <int32_t name='num_building_type5'/>
-        <static-array name='building_shop_house' pointer-type='site_realization_building' count='20'/>
-        <int32_t name='num_building_shop_house'/>
-        <int32_t/>
-        <int32_t/>?
-        <int32_t/>?
-        <int32_t/>?
+        <static-array name='building_well' pointer-type='site_realization_building' count='20'/>
+        <int32_t name='num_building_well'/>
+        <static-array name='building_temple' pointer-type='site_realization_building' count='20'/>
+        <int32_t name='num_building_temple'/>
+        <static-array name='building_type22' pointer-type='site_realization_building' count='20'/>
+        <int32_t name='num_building_type22'/>
+        <static-array name='building_type21' pointer-type='site_realization_building' count='20'/>
+        <int32_t name='num_building_type21'/>
+        <stl-vector name="unk_wsr_vector"/>
     </struct-type>
 
     <struct-type type-name='site_realization_crossroads'>
@@ -593,6 +607,8 @@
         <enum-item name='hillock_house'/>
         <enum-item name='mead_hall'/>
         <enum-item name='fortress_entrance'/>
+        <enum-item name='library'/>
+        <enum-item name='tavern'/>
     </enum-type>
 
     <struct-type type-name='site_realization_building' key-field='id'>
@@ -651,31 +667,39 @@
         <int32_t name='mat_index'/>
     </struct-type>
 
+    <bitfield-type type-name='tower_shape'>
+        <flag-bit name='round'/>
+        <flag-bit name='hollow' comment='no internal floors or fortifications'/>
+        <flag-bit name='keep' comment='fill with rooms at the bottom'/>
+        <flag-bit name='goblin' comment='ignore set heights and generate automatically'/>
+        <flag-bit name='unk10' comment='set on goblin towers. doesnt seem to do anything'/>
+    </bitfield-type>
+
     <class-type type-name='site_realization_building_info_castle_wallst'
                 inherits-from='site_realization_building_infost'>
-        <int32_t name="unk_4"/>
-        <int32_t name="unk_8"/>
-        <int32_t name="unk_c"/>
-        <int32_t name="unk_10"/>
-        <int32_t name="unk_14"/>
-        <int32_t name="unk_18"/>
-        <int32_t name="unk_1c"/>
-        <int32_t name='unk_20'/>
-        <compound name='item1' type-name='site_building_item'/>
-        <compound name='item2' type-name='site_building_item'/>
+        <int32_t name="length"/>
+        <int32_t name="door_pos"/>
+        <int32_t name="start_x"/>
+        <int32_t name="start_y"/>
+        <int32_t name="start_z"/>
+        <int32_t name="end_x"/>
+        <int32_t name="end_y"/>
+        <int32_t name='end_z'/>
+        <compound name='wall_item' type-name='site_building_item'/>
+        <compound name='door_item' type-name='site_building_item'/>
     </class-type>
 
     <class-type type-name='site_realization_building_info_castle_towerst'
                 inherits-from='site_realization_building_infost'>
-        <int32_t name='unk_4'/>
-        <int32_t name="unk_8"/>
-        <int32_t name="unk_c"/>
-        <int32_t name="unk_10"/>
-        <int32_t name="unk_14"/>
-        <int32_t name="unk_18"/>
-        <compound name='item1' type-name='site_building_item'/>
-        <compound name='item2' type-name='site_building_item'/>
-        <int32_t name="unk_3c"/>
+        <int32_t name='roof_z'/>
+        <int32_t name="base_z" comment="can be below ground, but not above ground"/>
+        <int32_t name="door_n_elevation"/>
+        <int32_t name="door_s_elevation"/>
+        <int32_t name="soor_e_elevation"/>
+        <int32_t name="door_w_elevation"/>
+        <compound name='door_item' type-name='site_building_item'/>
+        <compound name='wall_item' type-name='site_building_item'/>
+        <bitfield name='shape' type-name='tower_shape'/>
         <int32_t name="unk_40"/>
         <int32_t name="unk_44"/>
     </class-type>
@@ -729,11 +753,11 @@
     <class-type type-name='site_realization_building_info_trenchesst'
                 inherits-from='site_realization_building_infost'>
         <int32_t name='unk_4'/>
-        <static-array name='unk_8' count='4'>
-            <int32_t/>
-            <int32_t/>
-            <int32_t/>
-            <int32_t/>
+        <static-array name='spokes' count='4' comment='N, S, E, W'>
+            <int32_t name='mound_min' comment='-30000 = nothing here'/>
+            <int32_t name='trench_min'/>
+            <int32_t name='trench_max'/>
+            <int32_t name='mound_max'/>
         </static-array>
     </class-type>
 
